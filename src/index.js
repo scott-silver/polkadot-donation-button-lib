@@ -5,7 +5,7 @@ import App from './App';
 
 window.initPolkadotDonationButton = ( { recipientPolkadotAddress } ) => {
   ReactDOM.render(
-    <App />,
+    <App polkadotAddress={recipientPolkadotAddress} />,
     document.getElementById('polkadot-modal-root')
   );
 }

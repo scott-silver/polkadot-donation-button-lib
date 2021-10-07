@@ -4,6 +4,10 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
 import {
   Button,
+  Form,
+  FormGroup,
+  Input,
+  Label,
   Modal,
   ModalHeader,
   ModalBody,
@@ -11,11 +15,9 @@ import {
 } from '@bootstrap-styled/v4';
 import BootstrapProvider from '@bootstrap-styled/provider';
 
-const testRecipient = '5C5555yEXUcmEJ5kkcCMvdZjUo7NGJiQJMS7vZXEeoMhj3VQ';
-const testAmount = 123456;
-
-function App({ }) {
+function App({ polkadotAddress }) {
   const [modalIsOpen, setModalIsOpen] = useState(true);
+  const donationAmount = 123456;
 
   const initiateDonation = async () => {
     const wsProvider = new WsProvider('wss://rpc.polkadot.io');
@@ -33,8 +35,8 @@ function App({ }) {
     const account = allAccounts[0];
 
     const transferExtrinsic = api.tx.balances.transfer(
-      testRecipient,
-      testAmount
+      polkadotAddress,
+      donationAmount
     );
 
     const injector = await web3FromSource(account.meta.source);
@@ -58,13 +60,22 @@ function App({ }) {
       <Modal isOpen={modalIsOpen} toggle={() => setModalIsOpen(false)}>
         <ModalHeader>Make a Donation with Polkadot</ModalHeader>
         <ModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+          <Form>
+
+            <FormGroup>
+              <Label>
+                Recipient address
+              </Label>
+              <Input
+                type="text"
+                style={{boxSizing: "border-box"}}
+                disabled={true}
+                value={polkadotAddress}
+              />
+            </FormGroup>
+
+          </Form>
+
         </ModalBody>
         <ModalFooter>
           <Button
