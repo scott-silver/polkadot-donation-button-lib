@@ -17,7 +17,7 @@ import BootstrapProvider from '@bootstrap-styled/provider';
 
 function App({ polkadotAddress }) {
   const [modalIsOpen, setModalIsOpen] = useState(true);
-  const donationAmount = 123456;
+  const [donationAmount, setDonationAmount] = useState(123456);
 
   const initiateDonation = async () => {
     const wsProvider = new WsProvider('wss://rpc.polkadot.io');
@@ -71,6 +71,18 @@ function App({ polkadotAddress }) {
                 style={{boxSizing: "border-box"}}
                 disabled={true}
                 value={polkadotAddress}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>
+                Donation amount (DOT)
+              </Label>
+              <Input
+                type="text"
+                style={{boxSizing: "border-box"}}
+                value={donationAmount}
+                onChange={e => setDonationAmount(e.target.value)}
               />
             </FormGroup>
 
