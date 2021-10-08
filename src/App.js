@@ -1,5 +1,5 @@
-import { useState } from "react";
-import './App.css';
+import React, { useState } from "react";
+// import './App.css';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
 import {
@@ -50,7 +50,7 @@ function App({ polkadotAddress }) {
         } else {
           // display status
         }
-    }).catch((error: any) => {
+    }).catch((error) => {
       // display failure status
     });
   }
