@@ -120,7 +120,7 @@ function App({ polkadotAddress, onClose }) {
           </Form>
 
           <div>
-            {displayStringForDonationStatus(donationStatus)}
+            Status: {displayStringForDonationStatus(donationStatus)}
           </div>
 
         </ModalBody>
