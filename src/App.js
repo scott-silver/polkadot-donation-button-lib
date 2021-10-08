@@ -35,10 +35,15 @@ function displayStringForDonationStatus(donationStatus) {
   }
 }
 
-function App({ polkadotAddress }) {
+function App({ polkadotAddress, onClose }) {
   const [modalIsOpen, setModalIsOpen] = useState(true);
   const [donationAmount, setDonationAmount] = useState(123456);
   const [donationStatus, setDonationStatus] = useState(DONATION_STATUS_READY);
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    onClose();
+  }
 
   const initiateDonation = async () => {
     setDonationStatus(DONATION_STATUS_REQUEST_PENDING);
@@ -80,7 +85,7 @@ function App({ polkadotAddress }) {
 
   return (
     <BootstrapProvider theme={{"$modal-dialog-bg": "purple"}}>
-      <Modal isOpen={modalIsOpen} toggle={() => setModalIsOpen(false)}>
+      <Modal isOpen={modalIsOpen} toggle={closeModal}>
         <ModalHeader>Make a Donation with Polkadot</ModalHeader>
         <ModalBody>
           <Form>
@@ -126,7 +131,7 @@ function App({ polkadotAddress }) {
           <Button
             size="sm"
             color="secondary"
-            onClick={() => setModalIsOpen(false)}
+            onClick={closeModal}
           >
             Cancel
           </Button>
