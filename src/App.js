@@ -19,6 +19,7 @@ const DONATION_STATUS_READY = 0;
 const DONATION_STATUS_REQUEST_PENDING = 1;
 const DONATION_STATUS_REQUEST_SUCCESS = 2;
 const DONATION_STATUS_REQUEST_FAILED = 3;
+const DONATION_STATUS_NO_EXTENSION = 4;
 
 function displayStringForDonationStatus(donationStatus) {
   switch (donationStatus) {
@@ -30,6 +31,8 @@ function displayStringForDonationStatus(donationStatus) {
       return "donation succeeded!";
     case DONATION_STATUS_REQUEST_FAILED:
       return "donation failed";
+    case DONATION_STATUS_NO_EXTENSION:
+      return "no extension found";
     default:
       return "no status";
   }
@@ -54,6 +57,7 @@ function App({ polkadotAddress, onClose }) {
 
     if (extensions.length === 0) {
       // there's no extension; point the user to an extension they can download
+      setDonationStatus(DONATION_STATUS_NO_EXTENSION);
       return;
     }
 
@@ -72,7 +76,6 @@ function App({ polkadotAddress, onClose }) {
       account.address,
       { signer: injector.signer },
       ({ status }) => {
-        console.log(status);
         if (status.isInBlock) {
           setDonationStatus(DONATION_STATUS_REQUEST_SUCCESS);
         } else {
