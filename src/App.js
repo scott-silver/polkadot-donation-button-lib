@@ -15,11 +15,33 @@ import {
 } from '@bootstrap-styled/v4';
 import BootstrapProvider from '@bootstrap-styled/provider';
 
+const DONATION_STATUS_READY = 0;
+const DONATION_STATUS_REQUEST_PENDING = 1;
+const DONATION_STATUS_REQUEST_SUCCESS = 2;
+const DONATION_STATUS_REQUEST_FAILED = 3;
+
+function displayStringForDonationStatus(donationStatus) {
+  switch (donationStatus) {
+    case DONATION_STATUS_READY:
+      return "ready";
+    case DONATION_STATUS_REQUEST_PENDING:
+      return "pending";
+    case DONATION_STATUS_REQUEST_SUCCESS:
+      return "donation succeeded!";
+    case DONATION_STATUS_REQUEST_FAILED:
+      return "donation failed";
+    default:
+      return "no status";
+  }
+}
+
 function App({ polkadotAddress }) {
   const [modalIsOpen, setModalIsOpen] = useState(true);
   const [donationAmount, setDonationAmount] = useState(123456);
+  const [donationStatus, setDonationStatus] = useState(DONATION_STATUS_READY);
 
   const initiateDonation = async () => {
+    setDonationStatus(DONATION_STATUS_REQUEST_PENDING);
     const wsProvider = new WsProvider('wss://rpc.polkadot.io');
     const api = await ApiPromise.create({ provider: wsProvider });
 
@@ -45,13 +67,14 @@ function App({ polkadotAddress }) {
       account.address,
       { signer: injector.signer },
       ({ status }) => {
+        console.log(status);
         if (status.isInBlock) {
-          // display confirmation message
+          setDonationStatus(DONATION_STATUS_REQUEST_SUCCESS);
         } else {
           // display status
         }
     }).catch((error) => {
-      // display failure status
+      setDonationStatus(DONATION_STATUS_REQUEST_FAILED);
     });
   }
 
@@ -88,13 +111,23 @@ function App({ polkadotAddress }) {
 
           </Form>
 
+          <div>
+            {displayStringForDonationStatus(donationStatus)}
+          </div>
+
         </ModalBody>
         <ModalFooter>
           <Button
+            size="sm"
             color="primary"
             onClick={() => initiateDonation()}
+            disabled={donationStatus !== DONATION_STATUS_READY}
           >Make Donation</Button>
-          <Button color="secondary" onClick={() => setModalIsOpen(false)}>
+          <Button
+            size="sm"
+            color="secondary"
+            onClick={() => setModalIsOpen(false)}
+          >
             Cancel
           </Button>
         </ModalFooter>
